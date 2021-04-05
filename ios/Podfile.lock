@@ -12,6 +12,20 @@ PODS:
     - Flutter
   - webview_flutter (0.0.1):
     - Flutter
+  - zendesk (0.0.1):
+    - Flutter
+    - ZendeskChatSDK
+  - ZendeskChatProvidersSDK (2.10.0)
+  - ZendeskChatSDK (2.10.0):
+    - ZendeskChatProvidersSDK (~> 2.10.0)
+    - ZendeskMessagingSDK (~> 3.8.1)
+  - ZendeskCommonUISDK (6.1.0)
+  - ZendeskMessagingAPISDK (3.8.1):
+    - ZendeskSDKConfigurationsSDK (~> 1.1.7)
+  - ZendeskMessagingSDK (3.8.1):
+    - ZendeskCommonUISDK (~> 6.1.0)
+    - ZendeskMessagingAPISDK (~> 3.8.1)
+  - ZendeskSDKConfigurationsSDK (1.1.7)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -21,6 +35,16 @@ DEPENDENCIES:
   - video_player (from `.symlinks/plugins/video_player/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
+  - zendesk (from `.symlinks/plugins/zendesk/ios`)
+
+SPEC REPOS:
+  trunk:
+    - ZendeskChatProvidersSDK
+    - ZendeskChatSDK
+    - ZendeskCommonUISDK
+    - ZendeskMessagingAPISDK
+    - ZendeskMessagingSDK
+    - ZendeskSDKConfigurationsSDK
 
 EXTERNAL SOURCES:
   Flutter:
@@ -37,6 +61,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock/ios"
   webview_flutter:
     :path: ".symlinks/plugins/webview_flutter/ios"
+  zendesk:
+    :path: ".symlinks/plugins/zendesk/ios"
 
 SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
@@ -46,6 +72,13 @@ SPEC CHECKSUMS:
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
   wakelock: bfc7955c418d0db797614075aabbc58a39ab5107
   webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
+  zendesk: 5e2053d220907e9c2857b9547f40ff3a3a1b3998
+  ZendeskChatProvidersSDK: dcda37575fba7ae503f3dc03313424ef1b2e729d
+  ZendeskChatSDK: 389196ae1688de1104ac05a40c5f89a9e76db838
+  ZendeskCommonUISDK: 92ca6b16956430a2cb61c89aeaa6ca123d1f81fd
+  ZendeskMessagingAPISDK: 986919a8f6f11a7019660d1ff798f1efb42fa572
+  ZendeskMessagingSDK: bf9a06f0cbb219617d9cf60a46aba1b68c8f3b30
+  ZendeskSDKConfigurationsSDK: 45fa87ec8418697f7fce5e56bec472052f0aedb5
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
