@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1061345337595-7phbqscgt83aomuvkih0nkna48n5lbt4.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1061345337595-7phbqscgt83aomuvkih0nkna48n5lbt4</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1061345337595-14kt91lf6ksasgdo5mdugh6bvgchsvv0.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB2fKQZ6umzrxXJl6ipep4t5VEounB5hsk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1061345337595</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.kwApps.heed</string>
+	<key>PROJECT_ID</key>
+	<string>heed-5050e</string>
+	<key>STORAGE_BUCKET</key>
+	<string>heed-5050e.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1061345337595:ios:f94ef1ba570f5fbbe0105e</string>
+	<key>DATABASE_URL</key>
+	<string>https://heed-5050e.firebaseio.com</string>
+</dict>
+</plist>
