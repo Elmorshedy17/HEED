@@ -1,7 +1,10 @@
-// import 'package:firebase_analytics/firebase_analytics.dart';
-// import 'package:firebase_analytics/observer.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'dart:io';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -32,6 +35,8 @@ import 'package:heed/src/views/screens/settings_screen.dart';
 import 'package:heed/src/views/screens/signUp_screen.dart';
 import 'package:heed/src/views/widgets/LifeCycle_widget.dart';
 import 'package:provider/provider.dart';
+
+import 'src/blocs/firebase_token.dart';
 ////////////////////////////////////////////////////////////////////////////////
 
 void main() async {
@@ -39,14 +44,43 @@ void main() async {
 This is only to be used for confirming that reports are being submitted as expected.
 It is not intended to be used for everyday development.*/
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+
+
+  Future initialize() async {
+    String tokenStr;
+
+    if (Platform.isAndroid) {
+      _fcm.getToken().then((token) {
+        print(token);
+        tokenStr = token.toString();
+        locator<FirebaseTokenBloc>().firebaseTokenSink.add(tokenStr);
+      });
+    } else if (Platform.isIOS) {
+      tokenStr =  await _fcm.getAPNSToken();
+      if(tokenStr == null){
+        _fcm.getToken().then((token) {
+          print(token);
+          tokenStr = token.toString();
+          locator<FirebaseTokenBloc>().firebaseTokenSink.add(tokenStr);
+
+        });
+      }
+
+    }
+  }
+
+  initialize();
+
   try {
     await setupLocator().then((_) async {
       AppLanguage appLanguage = locator<AppLanguage>();
-      // await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-      // FlutterError.onError =  FirebaseCrashlytics.instance.recordFlutterError;
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+      FlutterError.onError =  FirebaseCrashlytics.instance.recordFlutterError;
 
       await appLanguage.fetchLocale();
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
@@ -57,8 +91,8 @@ It is not intended to be used for everyday development.*/
       runApp(HeedApp(
         appLanguage: appLanguage,
       ));
-    }, onError: null
-    // FirebaseCrashlytics.instance.recordError
+    }, onError:
+    FirebaseCrashlytics.instance.recordError
     );
   } catch (error) {
     print("erroro $error");
@@ -69,8 +103,8 @@ It is not intended to be used for everyday development.*/
 
 class HeedApp extends StatelessWidget {
   final AppLanguage appLanguage;
-  // static FirebaseAnalytics analytics = FirebaseAnalytics();
-  // static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
 
 
   HeedApp({this.appLanguage});
@@ -100,7 +134,7 @@ class HeedApp extends StatelessWidget {
                   accentColor: Color(0xFF19769F),
                   fontFamily: 'hk-grotesk',
                 ),
-                // navigatorObservers: <NavigatorObserver>[observer],
+                navigatorObservers: <NavigatorObserver>[observer],
                 home: SplashScreen(
                   image: Image.asset(
                     'assets/images/GIF.gif',

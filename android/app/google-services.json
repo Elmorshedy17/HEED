@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "1061345337595",
+    "firebase_url": "https://heed-5050e.firebaseio.com",
+    "project_id": "heed-5050e",
+    "storage_bucket": "heed-5050e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061345337595:android:e7b3f75f7a24a605e0105e",
+        "android_client_info": {
+          "package_name": "com.spark.heed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1061345337595-lu6b5t7lpbcsprhei9ei70l8jokquf71.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spark.heed",
+            "certificate_hash": "7d6a70fc770cdb590b49ad1f958cbf01b2061818"
+          }
+        },
+        {
+          "client_id": "1061345337595-g9k972u745rucq7bqkbmnogctjnolfq7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spark.heed",
+            "certificate_hash": "516d57090c06bb8234403747313fe1e73532968e"
+          }
+        },
+        {
+          "client_id": "1061345337595-p9kj0il6brb5tlvp4i5ps02uhfj5ikrr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdaypa6AdbT8DiastZbhCx1Ul2-Hcz2z0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1061345337595-p9kj0il6brb5tlvp4i5ps02uhfj5ikrr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1061345337595-4e37pppur006sa8cn7j32534elb9q5aj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.spark.heed"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
