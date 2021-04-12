@@ -5,10 +5,12 @@ import 'package:heed/locator.dart';
 import 'package:heed/src/blocs/api_bloc/joinUs_bloc.dart';
 import 'package:heed/src/blocs/clinicJoinUs_bloc.dart';
 import 'package:heed/src/models/api_models/POST/joinRequest_model.dart';
+import 'package:heed/src/services/api/api.dart';
 import 'package:heed/src/services/prefs_Service.dart';
 import 'package:heed/src/views/widgets/NetworkSensitive.dart';
 import 'package:heed/src/views/widgets/observer_widget.dart';
 import 'package:heed/theme_setting.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ClinicJoinUsScreen extends StatefulWidget {
   @override
@@ -17,6 +19,7 @@ class ClinicJoinUsScreen extends StatefulWidget {
 
 class _ClinicJoinUsScreenState extends State<ClinicJoinUsScreen> {
   var clinicBloc = locator<ClinicJoinUsBloc>();
+  BehaviorSubject<bool> _isLoadingSubject = BehaviorSubject<bool>.seeded(false);
 
   int codeStatus = 0;
   bool isJoinClicked = false;
@@ -34,6 +37,7 @@ class _ClinicJoinUsScreenState extends State<ClinicJoinUsScreen> {
   @override
   void dispose() {
     // locator<PrefsService>().isOnline = false;
+    _isLoadingSubject.close();
     super.dispose();
   }
 //  @override
@@ -84,104 +88,124 @@ class _ClinicJoinUsScreenState extends State<ClinicJoinUsScreen> {
 //      }
 //    });
     return NetworkSensitive(
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          //  title: Text("Receipt"),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              size: 25.0,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        body: GestureDetector(
-          onTap: () {
-            // call this method here to hide soft keyboard
-            FocusScope.of(context).requestFocus(new FocusNode());
-          },
-          child: Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              Positioned(
-                top: -80.0,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  child: Image.asset(
-                    'assets/images/signup.png',
-                    fit: BoxFit.cover,
-//                color: Color.fromRGBO(255, 255, 255, 0.6),
-//                colorBlendMode: BlendMode.modulate
+      child: StreamBuilder(
+          initialData: false,
+          stream: _isLoadingSubject.stream,
+          builder: (context, isLoadingSnapshot) {
+          return Stack(
+            children: [
+              Scaffold(
+                appBar: AppBar(
+                  elevation: 0,
+                  //  title: Text("Receipt"),
+                  leading: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      size: 25.0,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                 ),
-              ),
-              SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * .15,
-                    ),
-                    Card(
-                      elevation: 4.5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+                body: GestureDetector(
+                  onTap: () {
+                    // call this method here to hide soft keyboard
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                  },
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      Positioned(
+                        top: -80.0,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          child: Image.asset(
+                            'assets/images/signup.png',
+                            fit: BoxFit.cover,
+//                color: Color.fromRGBO(255, 255, 255, 0.6),
+//                colorBlendMode: BlendMode.modulate
+                          ),
+                        ),
                       ),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * .8,
-                        padding: EdgeInsets.only(
-                            top: 20.0, right: 20.0, left: 20.0, bottom: 10.0),
+                      SingleChildScrollView(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              AppLocalizations.of(context)
-                                  .translate('joinUs_str'),
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: LargeFont,
-                                  fontWeight: semiFont),
-                            ),
                             SizedBox(
-                              height: 20.0,
+                              height: MediaQuery.of(context).size.height * .15,
                             ),
-                            Form(
-                              child: Wrap(
-                                children: <Widget>[
-                                  nameClinicField(),
-                                  Container(
-                                    height: 10.0,
-                                  ),
-                                  nameClinicRepField(),
-                                  Container(
-                                    height: 10.0,
-                                  ),
-                                  mobileClinicField(),
-                                  Container(
-                                    height: 10.0,
-                                  ),
-                                  clinicLocationField(),
-                                ],
+                            Card(
+                              elevation: 4.5,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * .8,
+                                padding: EdgeInsets.only(
+                                    top: 20.0, right: 20.0, left: 20.0, bottom: 10.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      AppLocalizations.of(context)
+                                          .translate('joinUs_str'),
+                                      style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: LargeFont,
+                                          fontWeight: semiFont),
+                                    ),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    Form(
+                                      child: Wrap(
+                                        children: <Widget>[
+                                          nameClinicField(),
+                                          Container(
+                                            height: 10.0,
+                                          ),
+                                          nameClinicRepField(),
+                                          Container(
+                                            height: 10.0,
+                                          ),
+                                          mobileClinicField(),
+                                          Container(
+                                            height: 10.0,
+                                          ),
+                                          clinicLocationField(),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    clinicJoinUpButton(),
+                                  ],
+                                ),
                               ),
                             ),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            clinicJoinUpButton(),
                           ],
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
+              isLoadingSnapshot.data == true
+                  ? Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                color: Colors.black.withOpacity(.5),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+                  : Container(),
             ],
-          ),
-        ),
+          );
+        }
       ),
     );
   }
@@ -297,6 +321,7 @@ class _ClinicJoinUsScreenState extends State<ClinicJoinUsScreen> {
                   ),
                   onPressed: snapshot.hasData
                       ? () {
+                    _isLoadingSubject.sink.add(true);
                           print("hello mohamed");
                           locator<JoinUsBloc>()
                               .inName
@@ -311,7 +336,136 @@ class _ClinicJoinUsScreenState extends State<ClinicJoinUsScreen> {
                               .inPhone
                               .add(phoneController.value.text);
                           locator<JoinUsBloc>().inClick.add(!isJoinClicked);
-                          _showMaterialDialog();
+                          // _showMaterialDialog();
+
+                          ApiService.postJoinUsModel(nameController.text, clinicController.text, addressController.text, phoneController.text)
+                              .then((value) {
+                            _isLoadingSubject.sink.add(false);
+
+                            String msg = value.message;
+                            if (value.status == 1) {
+
+
+                              showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      contentPadding: EdgeInsets.all(15.0),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                      title: Text(
+                                        AppLocalizations.of(context).translate('CONGRATS!_str'),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: MediumFont, color: Theme.of(context).primaryColor),
+                                      ),
+                                      content: Container(
+                                        decoration: new BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          color: const Color(0xFFFFFF),
+                                          borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+                                        ),
+                                        height: MediaQuery.of(context).size.height * 0.29,
+                                        width: MediaQuery.of(context).size.width * 0.5,
+                                        child: Column(
+                                          children: <Widget>[
+                                            Container(
+                                              margin: EdgeInsets.only(top: 15.0, bottom: 30.0),
+                                              height: 55.0,
+                                              width: 85.0,
+                                              child: Image.asset("assets/images/hand.png"),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(bottom: 15.0),
+                                              child: Text(
+                                                // AppLocalizations.of(context).translate('CONGRATS!_str')
+                                                msg,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: SecondaryFont,
+                                                    color: Theme.of(context).primaryColor,
+                                                    height: 1.5),
+                                              ),
+                                            ),
+                                            Center(
+                                              child: ButtonTheme(
+                                                minWidth: 100.0,
+                                                height: 30.0,
+                                                child: RaisedButton(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: new BorderRadius.circular(25.0),
+                                                  ),
+                                                  child: Text(
+                                                    AppLocalizations.of(context)
+                                                        .translate('continue_str'),
+                                                    style: TextStyle(
+                                                        color: Colors.white, fontSize: SecondaryFont),
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                    Navigator.pushReplacementNamed(
+                                                        context, '/homeScreen');
+                                                  },
+                                                  color: greyBlue,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      titlePadding: EdgeInsets.only(top: 35.0),
+//            actions: <Widget>[
+//              ,
+//            ],
+                                    );
+                                  });
+
+                              // Navigator.pushReplacementNamed(context, '/homeScreen');
+                              codeStatus = 1;
+
+                            }else{
+                              codeStatus = 0;
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      contentPadding: EdgeInsets.all(15.0),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                      content: Container(
+                                        decoration: new BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          color: const Color(0xFFFFFF),
+                                          borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+                                        ),
+                                        height: 50,
+                                        // MediaQuery.of(context).size.height * 0.29,
+                                        width: MediaQuery.of(context).size.width * 0.5,
+                                        // child: Column(
+                                        // children: <Widget>[
+                                        child: Center(
+                                          child: Container(
+                                            margin: EdgeInsets.only(bottom: 15.0),
+                                            child: Text(
+                                              msg,
+                                              textAlign: TextAlign.center,
+                                              softWrap: true,
+                                              maxLines: 3,
+                                              style: TextStyle(fontSize: 12, height: 1.5),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      titlePadding: EdgeInsets.only(top: 35.0),
+                                    );
+                                  });
+                            }
+
+
+
+                          });
+
                         }
                       : null,
                 ),
@@ -321,86 +475,86 @@ class _ClinicJoinUsScreenState extends State<ClinicJoinUsScreen> {
         });
   }
 
-  void _showMaterialDialog() {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            contentPadding: EdgeInsets.all(15.0),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0))),
-            title: Text(
-              AppLocalizations.of(context).translate('CONGRATS!_str'),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: MediumFont, color: Theme.of(context).primaryColor),
-            ),
-            content: Container(
-              decoration: new BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: const Color(0xFFFFFF),
-                borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
-              ),
-              height: MediaQuery.of(context).size.height * 0.29,
-              width: MediaQuery.of(context).size.width * 0.5,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(top: 15.0, bottom: 30.0),
-                    height: 55.0,
-                    width: 85.0,
-                    child: Image.asset("assets/images/hand.png"),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 15.0),
-                    child: CustomObserver(
-                      stream: locator<JoinUsBloc>().joinUs$,
-                      onSuccess: (context, JoinUsModel data) {
-                        String msg = data.message;
-                        return Text(
-                          // AppLocalizations.of(context).translate('CONGRATS!_str')
-                          msg,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: SecondaryFont,
-                              color: Theme.of(context).primaryColor,
-                              height: 1.5),
-                        );
-                      },
-                    ),
-                  ),
-                  Center(
-                    child: ButtonTheme(
-                      minWidth: 100.0,
-                      height: 30.0,
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(25.0),
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)
-                              .translate('continue_str'),
-                          style: TextStyle(
-                              color: Colors.white, fontSize: SecondaryFont),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.pushReplacementNamed(
-                              context, '/homeScreen');
-                        },
-                        color: greyBlue,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            titlePadding: EdgeInsets.only(top: 35.0),
-//            actions: <Widget>[
-//              ,
-//            ],
-          );
-        });
-  }
+//   void _showMaterialDialog() {
+//     showDialog(
+//         barrierDismissible: false,
+//         context: context,
+//         builder: (context) {
+//           return AlertDialog(
+//             contentPadding: EdgeInsets.all(15.0),
+//             shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.all(Radius.circular(20.0))),
+//             title: Text(
+//               AppLocalizations.of(context).translate('CONGRATS!_str'),
+//               textAlign: TextAlign.center,
+//               style: TextStyle(
+//                   fontSize: MediumFont, color: Theme.of(context).primaryColor),
+//             ),
+//             content: Container(
+//               decoration: new BoxDecoration(
+//                 shape: BoxShape.rectangle,
+//                 color: const Color(0xFFFFFF),
+//                 borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+//               ),
+//               height: MediaQuery.of(context).size.height * 0.29,
+//               width: MediaQuery.of(context).size.width * 0.5,
+//               child: Column(
+//                 children: <Widget>[
+//                   Container(
+//                     margin: EdgeInsets.only(top: 15.0, bottom: 30.0),
+//                     height: 55.0,
+//                     width: 85.0,
+//                     child: Image.asset("assets/images/hand.png"),
+//                   ),
+//                   Container(
+//                     margin: EdgeInsets.only(bottom: 15.0),
+//                     child: CustomObserver(
+//                       stream: locator<JoinUsBloc>().joinUs$,
+//                       onSuccess: (context, JoinUsModel data) {
+//                         String msg = data.message;
+//                         return Text(
+//                           // AppLocalizations.of(context).translate('CONGRATS!_str')
+//                           msg,
+//                           textAlign: TextAlign.center,
+//                           style: TextStyle(
+//                               fontSize: SecondaryFont,
+//                               color: Theme.of(context).primaryColor,
+//                               height: 1.5),
+//                         );
+//                       },
+//                     ),
+//                   ),
+//                   Center(
+//                     child: ButtonTheme(
+//                       minWidth: 100.0,
+//                       height: 30.0,
+//                       child: RaisedButton(
+//                         shape: RoundedRectangleBorder(
+//                           borderRadius: new BorderRadius.circular(25.0),
+//                         ),
+//                         child: Text(
+//                           AppLocalizations.of(context)
+//                               .translate('continue_str'),
+//                           style: TextStyle(
+//                               color: Colors.white, fontSize: SecondaryFont),
+//                         ),
+//                         onPressed: () {
+//                           Navigator.pop(context);
+//                           Navigator.pushReplacementNamed(
+//                               context, '/homeScreen');
+//                         },
+//                         color: greyBlue,
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             titlePadding: EdgeInsets.only(top: 35.0),
+// //            actions: <Widget>[
+// //              ,
+// //            ],
+//           );
+//         });
+//   }
 }

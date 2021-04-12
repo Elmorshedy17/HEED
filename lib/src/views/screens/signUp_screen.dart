@@ -7,9 +7,11 @@ import 'package:heed/src/blocs/api_bloc/register_bloc.dart';
 import 'package:heed/src/blocs/signUp_bloc.dart';
 import 'package:heed/src/models/api_models/POST/login_model.dart';
 import 'package:heed/src/models/api_models/POST/register_model.dart';
+import 'package:heed/src/services/api/api.dart';
 import 'package:heed/src/services/prefs_Service.dart';
 import 'package:heed/src/views/widgets/observer_widget.dart';
 import 'package:heed/theme_setting.dart';
+import 'package:rxdart/rxdart.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -18,13 +20,14 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   var signUpBloc = locator<SignUpBloc>();
-  String email;
-  String password;
-  String passwordConfirmation;
-  String name;
-  String phone;
+  // String email;
+  // String password;
+  // String passwordConfirmation;
+  // String name;
+  // String phone;
   int codeStatus = 0;
   bool isRegisterClicked = false;
+  BehaviorSubject<bool> _isLoadingSubject = BehaviorSubject<bool>.seeded(false);
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -64,6 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void dispose() {
     // locator<PrefsService>().isOnline = false;
+    _isLoadingSubject.close();
     super.dispose();
   }
 
@@ -105,133 +109,153 @@ class _SignUpScreenState extends State<SignUpScreen> {
           locator<TextEditingController>().clear();
           return true;
         },
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            //  title: Text("Receipt"),
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                size: 25.0,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          body: GestureDetector(
-            onTap: () {
-              // call this method here to hide soft keyboard
-              FocusScope.of(context).requestFocus(new FocusNode());
-            },
-            child: Stack(
+        child: StreamBuilder(
+            initialData: false,
+            stream: _isLoadingSubject.stream,
+            builder: (context, isLoadingSnapshot) {
+            return Stack(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/images/signup.png',
+                Scaffold(
+                  appBar: AppBar(
+                    elevation: 0,
+                    //  title: Text("Receipt"),
+                    leading: IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        size: 25.0,
                       ),
-                      fit: BoxFit.cover,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
                   ),
-                ),
-                ListView(
-                  children: <Widget>[
-                    Container(
-                      // decoration: BoxDecoration(
-                      //   image: DecorationImage(
-                      //     image: AssetImage(
-                      //       'assets/images/signup.png',
-                      //     ),
-                      //     fit: BoxFit.cover,
-                      //   ),
-                      // ),
-                      child: Center(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height * .25,
+                  body: GestureDetector(
+                    onTap: () {
+                      // call this method here to hide soft keyboard
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                    },
+                    child: Stack(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(
+                                'assets/images/signup.png',
                               ),
-                              Card(
-                                elevation: 4.5,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width * .8,
-                                  padding: EdgeInsets.only(
-                                      top: 20.0,
-                                      right: 20.0,
-                                      left: 20.0,
-                                      bottom: 10.0),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        ListView(
+                          children: <Widget>[
+                            Container(
+                              // decoration: BoxDecoration(
+                              //   image: DecorationImage(
+                              //     image: AssetImage(
+                              //       'assets/images/signup.png',
+                              //     ),
+                              //     fit: BoxFit.cover,
+                              //   ),
+                              // ),
+                              child: Center(
+                                child: SingleChildScrollView(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
-                                      Text(
-                                        AppLocalizations.of(context)
-                                            .translate('signup_str'),
-                                        style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                          fontSize: LargeFont,
+                                      SizedBox(
+                                        height: MediaQuery.of(context).size.height * .25,
+                                      ),
+                                      Card(
+                                        elevation: 4.5,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(15.0),
+                                        ),
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.width * .8,
+                                          padding: EdgeInsets.only(
+                                              top: 20.0,
+                                              right: 20.0,
+                                              left: 20.0,
+                                              bottom: 10.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                AppLocalizations.of(context)
+                                                    .translate('signup_str'),
+                                                style: TextStyle(
+                                                  color: Theme.of(context).primaryColor,
+                                                  fontSize: LargeFont,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 20.0,
+                                              ),
+                                              Form(
+                                                child: Wrap(
+                                                  children: <Widget>[
+                                                    nameField(),
+                                                    Container(
+                                                      height: 10.0,
+                                                    ),
+                                                    emailField(),
+                                                    Container(
+                                                      height: 10.0,
+                                                    ),
+                                                    mobileField(),
+                                                    Container(
+                                                      height: 10.0,
+                                                    ),
+                                                    passwordField(),
+                                                    Container(
+                                                      height: 10.0,
+                                                    ),
+                                                    confirmPasswordField(),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              acceptTermsCheck(),
+//                    SizedBox(height: 10.0,),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       SizedBox(
                                         height: 20.0,
                                       ),
-                                      Form(
-                                        child: Wrap(
-                                          children: <Widget>[
-                                            nameField(),
-                                            Container(
-                                              height: 10.0,
-                                            ),
-                                            emailField(),
-                                            Container(
-                                              height: 10.0,
-                                            ),
-                                            mobileField(),
-                                            Container(
-                                              height: 10.0,
-                                            ),
-                                            passwordField(),
-                                            Container(
-                                              height: 10.0,
-                                            ),
-                                            confirmPasswordField(),
-                                          ],
-                                        ),
-                                      ),
+                                      signUpButton(context),
                                       SizedBox(
-                                        height: 5.0,
+                                        height: 10.0,
                                       ),
-                                      acceptTermsCheck(),
-//                    SizedBox(height: 10.0,),
+                                      loginLink(),
                                     ],
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 20.0,
-                              ),
-                              signUpButton(context),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              loginLink(),
-                            ],
-                          ),
+                              ) /* add child content here */,
+                            ),
+                          ],
                         ),
-                      ) /* add child content here */,
+                      ],
                     ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+                  ),
 //      ),
+                ),
+                isLoadingSnapshot.data == true
+                    ? Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.black.withOpacity(.5),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+                    : Container(),
+              ],
+            );
+          }
         ),
       );
   }
@@ -396,6 +420,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   // locator<PrefsService>().hasSignedUp = true;
                   // locator<PrefsService>().hasLoggedIn = true;
                   if (result == true) {
+                    _isLoadingSubject.sink.add(true);
+
                     locator<RegisterBloc>()
                         .inEmail
                         .add(emailController.text);
@@ -416,8 +442,63 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         .inClick
                         .add(!isRegisterClicked);
 
-                    // setState(() {});
-                    _showMaterialDialog(context);
+                    // _showMaterialDialog(context);
+                    ApiService.postRegisterModel(emailController.text, passwordController.text, passwordConfirmationController.text, nameController.text, phoneController.text).then((value) {
+                      _isLoadingSubject.sink.add(false);
+
+                      User user = value.data.user;
+                      String msg = value.message;
+                      if (value.status == 1) {
+                        locator<PrefsService>().userObj = user;
+                        locator<PrefsService>().userPassword =
+                            passwordController.text;
+                        locator<PrefsService>().hasSignedUp = true;
+                        locator<PrefsService>().hasLoggedIn = true;
+                        Navigator.pushReplacementNamed(context, '/homeScreen');
+                        codeStatus = 1;
+
+                      }else{
+                        codeStatus = 0;
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                contentPadding: EdgeInsets.all(15.0),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                content: Container(
+                                  decoration: new BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    color: const Color(0xFFFFFF),
+                                    borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+                                  ),
+                                  height: 50,
+                                  // MediaQuery.of(context).size.height * 0.29,
+                                  width: MediaQuery.of(context).size.width * 0.5,
+                                  // child: Column(
+                                  // children: <Widget>[
+                                  child: Center(
+                                    child: Container(
+                                      margin: EdgeInsets.only(bottom: 15.0),
+                                      child: Text(
+                                      msg,
+                                      textAlign: TextAlign.center,
+                                      softWrap: true,
+                                      maxLines: 3,
+                                      style: TextStyle(fontSize: 12, height: 1.5),
+                                    ),
+                                    ),
+                                  ),
+                                ),
+                                titlePadding: EdgeInsets.only(top: 35.0),
+                              );
+                            });
+                      }
+
+
+
+                    });
+
                   } else {
                     showDialog(
                         context: context,
@@ -614,90 +695,90 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void _showMaterialDialog(BuildContext context) {
-    showDialog(
-      // barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            contentPadding: EdgeInsets.all(15.0),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0))),
-            content: Container(
-              decoration: new BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: const Color(0xFFFFFF),
-                borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
-              ),
-              height: 50,
-              // MediaQuery.of(context).size.height * 0.29,
-              width: MediaQuery.of(context).size.width * 0.5,
-              // child: Column(
-              // children: <Widget>[
-              child: Center(
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 15.0),
-                  child: CustomObserver<RegisterModel>(
-                    stream: locator<RegisterBloc>().register$,
-                    onSuccess: (context, RegisterModel data) {
-                      User user = data.data.user;
-                      String msg = data.message;
-                      if (data.status == 1) {
-                        locator<PrefsService>().userObj = user;
-                        locator<PrefsService>().userPassword =
-                            passwordController.text;
-                        locator<PrefsService>().hasSignedUp = true;
-                        locator<PrefsService>().hasLoggedIn = true;
-                        // locator<RegisterBloc>()
-                        //     .inEmail
-                        //     .add(emailController.text);
-                        // locator<RegisterBloc>()
-                        //     .inPassword
-                        //     .add(passwordController.text);
-                        // locator<RegisterBloc>()
-                        //     .inPasswordConfirmation
-                        //     .add(passwordConfirmationController.text);
-                        // locator<RegisterBloc>()
-                        //     .inPhone
-                        //     .add(phoneController.text);
-                        // locator<RegisterBloc>().inName.add(nameController.text);
-                        // locator<RegisterBloc>().inClick.add(!isRegisterClicked);
-
-                        // setState(() {
-                        codeStatus = 1;
-                        // });
-                        return Text(
-                          msg,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 18, height: 1.5),
-                        );
-                      }
-
-                      // setState(() {
-                      codeStatus = 0;
-                      // });
-                      return Text(
-                        msg,
-                        textAlign: TextAlign.center,
-                        softWrap: true,
-                        maxLines: 3,
-                        style: TextStyle(fontSize: 12, height: 1.5),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-            titlePadding: EdgeInsets.only(top: 35.0),
-          );
-        }).timeout(Duration(seconds: 1), onTimeout: () {
-      if (codeStatus == 1) {
-        Navigator.pushReplacementNamed(context, '/homeScreen');
-      }
-    }).whenComplete(() {
-      if (codeStatus == 1) {
-        Navigator.pushReplacementNamed(context, '/homeScreen');
-      }
-    });
-  }
+//   void _showMaterialDialog(BuildContext context) {
+//     showDialog(
+//       // barrierDismissible: false,
+//         context: context,
+//         builder: (context) {
+//           return AlertDialog(
+//             contentPadding: EdgeInsets.all(15.0),
+//             shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.all(Radius.circular(20.0))),
+//             content: Container(
+//               decoration: new BoxDecoration(
+//                 shape: BoxShape.rectangle,
+//                 color: const Color(0xFFFFFF),
+//                 borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+//               ),
+//               height: 50,
+//               // MediaQuery.of(context).size.height * 0.29,
+//               width: MediaQuery.of(context).size.width * 0.5,
+//               // child: Column(
+//               // children: <Widget>[
+//               child: Center(
+//                 child: Container(
+//                   margin: EdgeInsets.only(bottom: 15.0),
+//                   child: CustomObserver<RegisterModel>(
+//                     stream: locator<RegisterBloc>().register$,
+//                     onSuccess: (context, RegisterModel data) {
+//                       User user = data.data.user;
+//                       String msg = data.message;
+//                       if (data.status == 1) {
+//                         locator<PrefsService>().userObj = user;
+//                         locator<PrefsService>().userPassword =
+//                             passwordController.text;
+//                         locator<PrefsService>().hasSignedUp = true;
+//                         locator<PrefsService>().hasLoggedIn = true;
+//                         // locator<RegisterBloc>()
+//                         //     .inEmail
+//                         //     .add(emailController.text);
+//                         // locator<RegisterBloc>()
+//                         //     .inPassword
+//                         //     .add(passwordController.text);
+//                         // locator<RegisterBloc>()
+//                         //     .inPasswordConfirmation
+//                         //     .add(passwordConfirmationController.text);
+//                         // locator<RegisterBloc>()
+//                         //     .inPhone
+//                         //     .add(phoneController.text);
+//                         // locator<RegisterBloc>().inName.add(nameController.text);
+//                         // locator<RegisterBloc>().inClick.add(!isRegisterClicked);
+//
+//                         // setState(() {
+//                         codeStatus = 1;
+//                         // });
+//                         return Text(
+//                           msg,
+//                           textAlign: TextAlign.center,
+//                           style: TextStyle(fontSize: 18, height: 1.5),
+//                         );
+//                       }
+//
+//                       // setState(() {
+//                       codeStatus = 0;
+//                       // });
+//                       return Text(
+//                         msg,
+//                         textAlign: TextAlign.center,
+//                         softWrap: true,
+//                         maxLines: 3,
+//                         style: TextStyle(fontSize: 12, height: 1.5),
+//                       );
+//                     },
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             titlePadding: EdgeInsets.only(top: 35.0),
+//           );
+//         }).timeout(Duration(seconds: 1), onTimeout: () {
+//       if (codeStatus == 1) {
+//         Navigator.pushReplacementNamed(context, '/homeScreen');
+//       }
+//     }).whenComplete(() {
+//       if (codeStatus == 1) {
+//         Navigator.pushReplacementNamed(context, '/homeScreen');
+//       }
+//     });
+//   }
 }
