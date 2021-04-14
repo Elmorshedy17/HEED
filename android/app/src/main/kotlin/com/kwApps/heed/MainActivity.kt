@@ -1,4 +1,4 @@
-package com.kwApps.heed
+package com.spark.heed
 
 import io.flutter.embedding.android.FlutterActivity
 

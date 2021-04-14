@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 ///[(0)FlutterLocalNotificationsPlugin]///***********************************
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 //****************************************************************************
 import 'package:heed/localizations/app_localizations.dart';
 import 'package:heed/locator.dart';
@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ///[(1)FlutterLocalNotificationsPlugin]///
   /////// local notifications ///////////////////
   ///[start]//****************************************************
-  // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 //**************************************************************
   ///[end]//
 
@@ -72,16 +72,15 @@ class _HomeScreenState extends State<HomeScreen> {
     // initialize();
     ///[(2)FlutterLocalNotificationsPlugin]///
     ///////////////////// local notification ///////////////////////////
-
 //     initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
 //     If you have skipped STEP 3 then change app_icon to @mipmap/ic_launcher
     ///[start]//*********************************************************************************
     ///
-    // var initializationSettingsAndroid = new AndroidInitializationSettings("app_icon");
-    // var initializationSettingsIOS = new IOSInitializationSettings();
-    // var initializationSettings = new InitializationSettings(iOS: initializationSettingsIOS,android: initializationSettingsAndroid);
-    // flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    // flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
+    var initializationSettingsAndroid = new AndroidInitializationSettings("app_icon");
+    var initializationSettingsIOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(iOS: initializationSettingsIOS,android: initializationSettingsAndroid);
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
 
     ///[end]//*************************************************************************************************
     //////////////////// local notification ////////////////////////////
@@ -117,7 +116,14 @@ class _HomeScreenState extends State<HomeScreen> {
         locator<LocalFirebaseBloc>().localFirebaseSink.add(action);
         locator<LocalFirebaseBloc>().localFirebaseSinkTitle.add(title);
 
+            ///[(4)FlutterLocalNotificationsPlugin]///
+            ///[start]//******************************************
+            _showNotificationWithDefaultSound();
+            ///[End]//*******************************************
       });
+
+
+
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
         print('A new onMessageOpenedApp event was published!');
         // Navigator.pushNamed(context, '/message',
@@ -329,21 +335,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   ///[(3)FlutterLocalNotificationsPlugin]///
   ///[start]//**************************************************************
-  // Future _showNotificationWithDefaultSound() async {
-  //   var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-  //       'your channel id', 'your channel name', 'your channel description',
-  //       importance: Importance.Max, priority: Priority.High);
-  //   var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
-  //   var platformChannelSpecifics =
-  //       new NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-  //   await flutterLocalNotificationsPlugin.show(
-  //     0,
-  //     '${locator<LocalFirebaseBloc>().currentlocalFirebaseTitle}',
-  //     '${locator<LocalFirebaseBloc>().currentlocalFirebase}',
-  //     platformChannelSpecifics,
-  //     payload: 'Default_Sound',
-  //   );
-  // }
+  Future _showNotificationWithDefaultSound() async {
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+        'your channel id', 'your channel name', 'your channel description',
+        color: Theme.of(context).primaryColor
+        // importance: Importance.Max, priority: Priority.High
+    );
+    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+    var platformChannelSpecifics =
+        new NotificationDetails(android:androidPlatformChannelSpecifics,iOS: iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      '${locator<LocalFirebaseBloc>().currentlocalFirebaseTitle}',
+      '${locator<LocalFirebaseBloc>().currentlocalFirebase}',
+      platformChannelSpecifics,
+      payload: 'Default_Sound',
+    );
+  }
 
   ///[end]//*****************************************************************************
 

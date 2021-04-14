@@ -49,7 +49,7 @@ import 'package:heed/src/services/connection_service.dart';
 import 'package:heed/src/services/permission_service.dart';
 import 'package:heed/src/services/prefs_Service.dart';
 
-GetIt locator = GetIt.instance;
+final GetIt locator = GetIt.instance;
 
 Future setupLocator() async {
   // [Setup services]
@@ -66,6 +66,8 @@ Future setupLocator() async {
 
   // [Setup managers]
   locator.registerLazySingleton<AppLanguage>(() => AppLanguage());
+  locator.registerLazySingleton<FirebaseTokenBloc>(() => FirebaseTokenBloc());
+
   // Forms setting //
   locator.registerLazySingleton<SignUpBloc>(() => SignUpBloc());
   locator.registerLazySingleton<SignInBloc>(() => SignInBloc());
@@ -106,7 +108,6 @@ Future setupLocator() async {
   locator.registerLazySingleton<HistorySearchBloc>(() => HistorySearchBloc());
   locator.registerLazySingleton<MedicalSearchBloc>(() => MedicalSearchBloc());
   locator.registerLazySingleton<DoctorsSearchBloc>(() => DoctorsSearchBloc());
-  locator.registerLazySingleton<FirebaseTokenBloc>(() => FirebaseTokenBloc());
   locator.registerLazySingleton<ClinicDataBloc>(() => ClinicDataBloc());
   locator.registerLazySingleton<LocalFirebaseBloc>(() => LocalFirebaseBloc());
   locator.registerLazySingleton<TimeDateBridge>(() => TimeDateBridge());
