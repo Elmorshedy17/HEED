@@ -97,5 +97,6 @@
   "Payment_Gateway": "Payment Gateway",
   "skip_ads": "SKIP Ad",
   "noWifiTitle_str": "No Internet",
-  "noWifiContent_str": "Please check your connection to continue using Heed"
+  "noWifiContent_str": "Please check your connection to continue using Heed",
+  "share_app": "Share App"
 }

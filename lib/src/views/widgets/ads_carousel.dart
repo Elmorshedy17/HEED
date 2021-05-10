@@ -39,7 +39,7 @@ class _CarouselWidgetHomeState extends State<CarouselWidgetHome> {
           return widgetCarousel;
         }
 
-        return Container(
+        return data.data.slider.isNotEmpty ? Container(
           //  color: Colors.red,
           height: 90.0,
           width: double.infinity,
@@ -66,7 +66,7 @@ class _CarouselWidgetHomeState extends State<CarouselWidgetHome> {
               }
             },
           ),
-        );
+        ):Container();
       },
     );
   }

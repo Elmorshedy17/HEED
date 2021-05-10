@@ -66,6 +66,7 @@ class ApiService {
     );
     try {
       Response response = await dio.get("$BASE_URL$HomeScreen_VAR");
+      print("home response $response");
       return HomeScreenModel.fromJson(response.data);
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
@@ -78,7 +79,6 @@ class ApiService {
     final dio = Dio();
     try {
       Response response = await dio.get(url);
-
       return CheckoutModel.fromJson(response.data);
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
