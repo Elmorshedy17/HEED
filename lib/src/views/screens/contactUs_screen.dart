@@ -14,6 +14,7 @@ import 'package:heed/src/services/prefs_Service.dart';
 import 'package:heed/src/views/widgets/NetworkSensitive.dart';
 import 'package:heed/src/views/widgets/observer_widget.dart';
 import 'package:heed/theme_setting.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactUsScreen extends StatefulWidget {
@@ -551,6 +552,21 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
               leading: Icon(Icons.my_location),
               title: Text(
                   AppLocalizations.of(context).translate('ourLocation_str')),
+            ),
+            ListTile(
+              onTap: () {
+
+                if(Platform.isAndroid){
+                  Share.share('https://play.google.com/store/apps/details?id=com.spark.heed');
+
+                }else {
+                  Share.share('https://apps.apple.com/us/app/heed-kuwait/id1562142523');
+
+                }
+              },
+              leading: Icon(Icons.ios_share),
+              title: Text(
+                  AppLocalizations.of(context).translate('share_app')),
             ),
           ],
         );

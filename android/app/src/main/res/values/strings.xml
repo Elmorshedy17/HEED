@@ -1,0 +1,45 @@
+<resources>
+    ...
+    <string name="input_field_hint">Message</string>
+    <string name="chat_agent_left_message">%1$s left the chat</string>
+    <string name="chat_agent_joined_message">%1$s joined the chat</string>
+    <string name="chat_menu_end_button">End chat</string>
+    <string name="chat_ended_message">Chat ended</string>
+    <string name="chat_session_timeout_message">We\'ve not heard from you for a while so this chat session has been closed. Please start a new chat if you still have questions.</string>
+    <string name="chat_visitor_queue_message">Please wait while our agents attend to you. There are currently %1$s visitor(s) waiting to be served.</string>
+
+    <!--Chat fragment-->
+    <string name="chat_loading_message">Starting chat...</string>
+
+    <!--Email transcript dialog-->
+    <string name="email_transcript_title">Email a transcript?</string>
+    <string name="email_transcript_message">Send a transcript of this chat to your email address</string>
+    <string name="email_transcript_email_message">Please enter your email address</string>
+    <string name="email_transcript_email_hint">"email@address.com"</string>
+    <string name="email_transcript_confirm_button">Send</string>
+    <string name="email_transcript_cancel_button">Don\'t send</string>
+
+    <!--Chat end confirm dialog-->
+    <string name="chat_end_dialog_title">End this chat?</string>
+    <string name="chat_end_dialog_message">Your chat session will be closed</string>
+    <string name="chat_end_dialog_confirm_button">End</string>
+    <string name="chat_end_dialog_cancel_button">Cancel</string>
+
+    <!--Reconnection timeout dialog-->
+    <string name="reconnect_timeout_title">Connection lost</string>
+    <string name="reconnect_timeout_message">We have been unable to reconnect. Do you wish to continue trying?</string>
+    <string name="reconnect_timeout_confirm_button">Yes</string>
+    <string name="reconnect_timeout_cancel_button">No</string>
+    ...
+
+    ...
+    <string name="no_agents_title">No agents available</string>
+    <string name="no_agents_message">Sorry there are no agents available to chat. Please try again later or leave us a message.</string>
+    <string name="offline_message_button">Leave a message</string>
+    ...
+
+    ...
+    <string name="no_connectivity_toast_message">No connection</string>
+    <string name="reconnecting_toast_message">Reconnecting...</string>
+    ...
+</resources>

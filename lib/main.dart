@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -35,8 +34,8 @@ import 'package:heed/src/views/screens/settings_screen.dart';
 import 'package:heed/src/views/screens/signUp_screen.dart';
 import 'package:heed/src/views/widgets/LifeCycle_widget.dart';
 import 'package:provider/provider.dart';
-
 import 'src/blocs/firebase_token.dart';
+
 ////////////////////////////////////////////////////////////////////////////////
 
 void main() async {
@@ -53,31 +52,37 @@ It is not intended to be used for everyday development.*/
 
   Future initialize() async {
     String tokenStr;
+    _fcm.getToken().then((token) {
+      print(token);
+      tokenStr = token.toString();
+      locator<FirebaseTokenBloc>().firebaseTokenSink.add(tokenStr);
+    });
 
-    if (Platform.isAndroid) {
-      _fcm.getToken().then((token) {
-        print(token);
-        tokenStr = token.toString();
-        locator<FirebaseTokenBloc>().firebaseTokenSink.add(tokenStr);
-      });
-    } else if (Platform.isIOS) {
-      tokenStr =  await _fcm.getAPNSToken();
-      if(tokenStr == null){
-        _fcm.getToken().then((token) {
-          print(token);
-          tokenStr = token.toString();
-          locator<FirebaseTokenBloc>().firebaseTokenSink.add(tokenStr);
-
-        });
-      }
-
-    }
+    // if (Platform.isAndroid) {
+    //   _fcm.getToken().then((token) {
+    //     print(token);
+    //     tokenStr = token.toString();
+    //     locator<FirebaseTokenBloc>().firebaseTokenSink.add(tokenStr);
+    //   });
+    // } else if (Platform.isIOS) {
+    //   tokenStr =  await _fcm.getAPNSToken();
+    //   if(tokenStr == null){
+    //     _fcm.getToken().then((token) {
+    //       print(token);
+    //       tokenStr = token.toString();
+    //       locator<FirebaseTokenBloc>().firebaseTokenSink.add(tokenStr);
+    //
+    //     });
+    //   }
+    //
+    // }
   }
 
-  initialize();
 
   try {
     await setupLocator().then((_) async {
+      initialize();
+
       AppLanguage appLanguage = locator<AppLanguage>();
       await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
       FlutterError.onError =  FirebaseCrashlytics.instance.recordFlutterError;
@@ -101,20 +106,26 @@ It is not intended to be used for everyday development.*/
 
 ////////////////////////////////////////////////////////////////////////////////
 
-class HeedApp extends StatelessWidget {
+class HeedApp extends StatefulWidget {
   final AppLanguage appLanguage;
-  static FirebaseAnalytics analytics = FirebaseAnalytics();
-  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
 
 
   HeedApp({this.appLanguage});
 
   @override
+  _HeedAppState createState() => _HeedAppState();
+}
+
+class _HeedAppState extends State<HeedApp> {
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+  @override
   Widget build(BuildContext context) {
     return StreamProvider<InternetStatus>(
       create: (_) => ConnectionCheckerService().getConnectionStatus$,
       child: ChangeNotifierProvider<AppLanguage>(
-        create: (_) => appLanguage,
+        create: (_) => widget.appLanguage,
         child: Consumer<AppLanguage>(
           builder: (context, model, child) {
             return MaterialApp(

@@ -1,0 +1,46 @@
+<resources>
+    ...
+    <string name="input_field_hint">الرسالة</string>
+    <string name="chat_agent_left_message">%1$s left the chat</string>
+    <string name="chat_agent_joined_message">%1$s joined the chat</string>
+    <string name="chat_menu_end_button">إنهاء المحادئة</string>
+    <string name="chat_ended_message">إنتهت المحادثة</string>
+    <string name="chat_session_timeout_message">لم تتفاعل مع المحادثة لمدة طويلة لذا تم إغلاق هذه المحادثة. يرجى بدء محادثة جديدة إذا كان لا يزال لديك أسئلة.</string>
+    <string name="chat_visitor_queue_message">يرجى الإنتظار حتى يتوفر موظفين.</string>
+
+    <!--Chat fragment-->
+    <string name="chat_loading_message">بدء المحادثة</string>
+
+    <!--Email transcript dialog-->
+    <string name="email_transcript_title">هل تود نسخ المحادثة؟</string>
+    <string name="email_transcript_message">إرسال نسخة من المحادثة على البريد الإلكتروني</string>
+    <string name="email_transcript_email_message">أدخل البريد الإلكتروني</string>
+    <string name="email_transcript_email_hint">"email@address.com"</string>
+    <string name="email_transcript_confirm_button">إرسال</string>
+    <string name="email_transcript_cancel_button">لا ترسل</string>
+
+    <!--Chat end confirm dialog-->
+    <string name="chat_end_dialog_title">هل تود إنهاء المحادثة؟</string>
+    <string name="chat_end_dialog_message">ستغلق المحادثة</string>
+    <string name="chat_end_dialog_confirm_button">إنهاء</string>
+    <string name="chat_end_dialog_cancel_button">إلغاء</string>
+
+    <!--Reconnection timeout dialog-->
+    <string name="reconnect_timeout_title">فقد الإتصال</string>
+    <string name="reconnect_timeout_message">لم نتمكن من إعادة الاتصال. هل ترغب في مواصلة المحاولة؟
+</string>
+    <string name="reconnect_timeout_confirm_button">نعم</string>
+    <string name="reconnect_timeout_cancel_button">لا</string>
+    ...
+
+    ...
+    <string name="no_agents_title">لا يوجد موظف متاح</string>
+    <string name="no_agents_message">نأسف لا يوجد موظفون للرد. يرجى المحاولة مره أخرى لاحقا أو ترك رسالة لنا.</string>
+    <string name="offline_message_button">أكتب رسالة</string>
+    ...
+
+    ...
+    <string name="no_connectivity_toast_message">لا يوجد اتصال</string>
+    <string name="reconnecting_toast_message">إعادة الاتصال...</string>
+    ...
+</resources>
