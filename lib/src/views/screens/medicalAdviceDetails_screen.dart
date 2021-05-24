@@ -6,6 +6,7 @@ import 'package:heed/src/models/api_models/GET/medicalAdviceDetails_model.dart';
 import 'package:heed/src/services/prefs_Service.dart';
 import 'package:heed/src/views/widgets/NetworkSensitive.dart';
 import 'package:heed/src/views/widgets/observer_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MedicalAdviceDetailsScreen extends StatefulWidget {
   final int id;
@@ -104,6 +105,9 @@ class _MedicalAdviceDetailsScreenState
                     //   return TextAlign.justify;
                     // },
                     data: content.desc,
+                    onLinkTap: (url) async {
+                      await launch(url);
+                    },
                   ),
                 ),
               ],
