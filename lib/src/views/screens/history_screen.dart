@@ -242,6 +242,33 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                       color: Theme.of(context)
                                                           .primaryColor),
                                                 ),
+                                                SizedBox(
+                                                  height: 15,
+                                                ),
+                                                Text(
+                                                  "${AppLocalizations.of(context).translate('status_str')}:",
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                      SecondaryFont,
+                                                      color: Colors
+                                                          .black,
+                                                      fontWeight:
+                                                      bolFont),
+                                                ),
+                                                SizedBox(
+                                                  width: 5.0,
+                                                ),
+                                                Text(
+                                                  reservations[index].status,
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                      PrimaryFont,
+                                                      fontWeight:
+                                                      medFont,
+                                                      color: Theme.of(
+                                                          context)
+                                                          .primaryColor),
+                                                ),
                                               ],
                                             ),
                                           ],
@@ -394,15 +421,40 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                         width: 5.0,
                                                       ),
                                                       Text(
-                                                        reservationsSearch[
-                                                                index]
-                                                            .doctor,
+                                                        reservationsSearch[index].doctor,
                                                         style: TextStyle(
                                                             fontSize:
                                                                 PrimaryFont,
                                                             fontWeight: medFont,
                                                             color: Theme.of(
                                                                     context)
+                                                                .primaryColor),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 15,
+                                                      ),
+                                                      Text(
+                                                        "${AppLocalizations.of(context).translate('status_str')}:",
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                            SecondaryFont,
+                                                            color: Colors
+                                                                .black,
+                                                            fontWeight:
+                                                            bolFont),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5.0,
+                                                      ),
+                                                      Text(
+                                                        reservationsSearch[index].status,
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                            PrimaryFont,
+                                                            fontWeight:
+                                                            medFont,
+                                                            color: Theme.of(
+                                                                context)
                                                                 .primaryColor),
                                                       ),
                                                     ],

@@ -12,6 +12,7 @@ import 'package:heed/src/blocs/api_bloc/medicalAdviceDetails_bloc.dart';
 import 'package:heed/src/blocs/api_bloc/medicalAdvice_bloc.dart';
 import 'package:heed/src/blocs/api_bloc/notification_bloc.dart';
 import 'package:heed/src/blocs/api_bloc/ourClinics_bloc.dart';
+import 'package:heed/src/blocs/api_bloc/reservations_bloc.dart';
 import 'package:heed/src/blocs/api_bloc/settings_bloc.dart';
 import 'package:heed/src/models/api_models/GET/setting_model.dart';
 import 'package:heed/src/services/prefs_Service.dart';
@@ -197,6 +198,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             locator<AboutBloc>().inLang.add('ar');
                             locator<OurClinicsBloc>().inLang.add('ar');
                             locator<FavoritesBloc>().inLang.add('ar');
+                            locator<ReservationsBloc>().inLang.add('ar');
                           } else {
                             appLanguage.changeLanguage(Locale('en'));
                             locator<HomeBloc>().inLang.add('en');
@@ -208,6 +210,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             locator<AboutBloc>().inLang.add('en');
                             locator<OurClinicsBloc>().inLang.add('en');
                             locator<FavoritesBloc>().inLang.add('en');
+                            locator<ReservationsBloc>().inLang.add('en');
                           }
                         },
                       ),
@@ -366,7 +369,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   break;
                                 case 'instagram':
                                   await canLaunch("https://www.instagram.com")
-                                      ? await launch("https://www.instagram.com")
+                                      ? await launch(
+                                          "https://www.instagram.com")
                                       : throw 'Link cannot be handled';
                                   break;
                                 case 'google':
